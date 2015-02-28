@@ -49,6 +49,7 @@
         }
     }
 
-    setInterval(getNotifications, 1000);
+    getNotifications();
+    setInterval(getNotifications, 60000);
 
 }());
