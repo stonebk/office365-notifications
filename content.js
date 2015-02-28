@@ -35,7 +35,11 @@
         notifications = Array.prototype.slice.call(notifications);
         notifications.forEach(function (notification) {
             var title = notification.getAttribute('title');
-            msg[getNotificationType(title)] = getNotificationNumber(title);
+            msg[getNotificationType(title)] = 0;
+            // Make sure notification is visible (up-to-date)
+            if (notification.clientHeight) {
+                msg[getNotificationType(title)] = getNotificationNumber(title);
+            }
         });
 
         // Post message back to plugin for new message display
