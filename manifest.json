@@ -2,6 +2,9 @@
   "name": "Outlook Notifier",
   "description": "Outlook 365 Notification",
   "version": "2.0",
+  "icons": {
+    "256": "outlook_256.png"
+  },
   "permissions": [
     "*://*/*",
     "tabs",
