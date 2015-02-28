@@ -27,14 +27,24 @@ function switchTabs(callback) {
     });
 }
 
+function isCurrentTab(callback) {
+    chrome.tabs.getCurrent(function (tab) {
+        callback(tab.url && tab.url.indexOf('outlook') > 0);
+    });
+}
+
 function notify(title, message) {
-    chrome.notifications.create('notification' + Math.random(), {
-        type: 'basic',
-        title: title,
-        message: message,
-        iconUrl: 'outlook_256.png'
-    }, function (notificationId) {
-        // required, but do nothing
+    isCurrentTab(function (isCurrent) {
+        if (!isCurrent) {
+            chrome.notifications.create('notification' + Math.random(), {
+                type: 'basic',
+                title: title,
+                message: message,
+                iconUrl: 'outlook_256.png'
+            }, function (notificationId) {
+                // required, but do nothing
+            });
+        }
     });
 }
 
