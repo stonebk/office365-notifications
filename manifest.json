@@ -1,7 +1,7 @@
 {
   "name": "Outlook Notifier",
   "description": "Outlook 365 Notification",
-  "version": "2.0",
+  "version": "0.1",
   "icons": {
     "256": "outlook_256.png"
   },
