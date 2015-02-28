@@ -6,22 +6,24 @@ var TYPE = {
 };
 
 function switchTabs(callback) {
-    chrome.tabs.query({
-        windowId: window.WINDOW_ID_CURRENT
-    }, function (tabs) {
-        var tab, i;
-        for (i = 0; i < tabs.length; i++) {
-            tab = tabs[i];
-            if (tab.url && tab.url.indexOf('outlook') > 0) {
-                chrome.tabs.update(tab.id, {
-                    selected: true
-                });
-                if (callback) {
-                    callback(tab.id);
+    chrome.windows.getLastFocused({}, function (win) {
+        chrome.tabs.query({
+            windowId: win.id
+        }, function (tabs) {
+            var tab, i;
+            for (i = 0; i < tabs.length; i++) {
+                tab = tabs[i];
+                if (tab.url && tab.url.indexOf('outlook') > 0) {
+                    chrome.tabs.update(tab.id, {
+                        selected: true
+                    });
+                    if (callback) {
+                        callback(tab.id);
+                    }
+                    return;
                 }
-                return;
             }
-        }
+        });
     });
 }
 
@@ -35,6 +37,10 @@ function notify(title, message) {
         // do nothing
     });
 }
+
+chrome.notifications.onClicked.addListener(function () {
+    switchTabs();
+});
 
 chrome.runtime.onConnect.addListener(function (port) {
     port.onMessage.addListener(function (msg) {
