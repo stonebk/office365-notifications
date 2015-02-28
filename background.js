@@ -29,7 +29,7 @@ function switchTabs(callback) {
 
 function isCurrentTab(callback) {
     chrome.tabs.getCurrent(function (tab) {
-        callback(tab.url && tab.url.indexOf('outlook') > 0);
+        callback(tab && tab.url && tab.url.indexOf('outlook') > 0);
     });
 }
 
