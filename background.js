@@ -31,8 +31,8 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                     selected: true
                 });
                 chrome.tabs.executeScript(tab.id, { file: 'content.js' });
+                return;
             }
-            return;
         }
     });
 });
