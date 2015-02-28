@@ -34,13 +34,15 @@ function notify(title, message) {
         message: message,
         iconUrl: 'outlook_256.png'
     }, function (notificationId) {
-        // do nothing
+        // required, but do nothing
     });
 }
 
 chrome.notifications.onClicked.addListener(function (notificationId) {
     switchTabs();
-    chrome.notifications.clear(notificationId);
+    chrome.notifications.clear(notificationId, function () {
+        // required, but do nothing
+    });
 });
 
 chrome.runtime.onConnect.addListener(function (port) {
