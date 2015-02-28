@@ -3,7 +3,8 @@
   "description": "Outlook 365 Notification",
   "version": "0.1",
   "icons": {
-    "256": "outlook_256.png"
+    "256": "outlook_256.png",
+    "32": "outlook_32.png"
   },
   "permissions": [
     "*://*/*",
@@ -15,7 +16,7 @@
   },
   "browser_action": {
     "default_title": "Outlook Notifier",
-    "default_icon": "outlook_256.png"
+    "default_icon": "outlook_32.png"
   },
   "manifest_version": 2,
   "web_accessible_resources": [
