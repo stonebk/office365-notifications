@@ -1,6 +1,6 @@
 {
-  "name": "Outlook 365 Notifier",
-  "description": "Outlook 365 Notifications",
+  "name": "Office 365 Notifications",
+  "description": "Notifications for Office 365 email and calendar.",
   "version": "0.1",
   "icons": {
     "256": "outlook_256.png",
@@ -17,7 +17,7 @@
     "scripts": ["background.js"]
   },
   "browser_action": {
-    "default_title": "Outlook 365 Notifier",
+    "default_title": "Office 365 Notifications",
     "default_icon": "outlook_32.png"
   },
   "manifest_version": 2,
