@@ -38,8 +38,9 @@ function notify(title, message) {
     });
 }
 
-chrome.notifications.onClicked.addListener(function () {
+chrome.notifications.onClicked.addListener(function (notificationId) {
     switchTabs();
+    chrome.notifications.clear(notificationId);
 });
 
 chrome.runtime.onConnect.addListener(function (port) {
