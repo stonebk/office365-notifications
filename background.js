@@ -49,7 +49,8 @@ chrome.runtime.onConnect.addListener(function (port) {
     port.onMessage.addListener(function (msg) {
         var text = '';
         if (msg[TYPE.NEW_MAIL]) {
-            text += msg[TYPE.NEW_MAIL];
+            // Use "NEW" since the new mail count seems to be inaccurate
+            text = 'NEW';
         }
         chrome.browserAction.setBadgeText({
             text: text
