@@ -9,7 +9,7 @@
         "32": "images/outlook_32.png"
     },
     "permissions": [
-        "*://*/*",
+        "*://outlook.office365.com/*",
         "tabs",
         "notifications",
         "storage"
