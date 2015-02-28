@@ -5,7 +5,6 @@ var TYPE = {
     IM_REQUESTS: 'IM requests'
 };
 
-
 chrome.runtime.onConnect.addListener(function (port) {
     port.onMessage.addListener(function (msg) {
         var text = '';
@@ -21,5 +20,17 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-    chrome.tabs.executeScript({ file: 'content.js' });
+    chrome.tabs.getAllInWindow(undefined, function (tabs) {
+        var tab, i;
+        for (i = 0; i < tabs.length; i++) {
+            tab = tabs[i];
+            if (tab.url && tab.url.indexOf('outlook') > 0) {
+                chrome.tabs.update(tab.id, {
+                    selected: true
+                });
+                chrome.tabs.executeScript(tab.id, { file: 'content.js' });
+            }
+            return;
+        }
+    });
 });

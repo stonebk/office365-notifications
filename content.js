@@ -50,6 +50,8 @@
     }
 
     getNotifications();
-    setInterval(getNotifications, 60000);
+    if (!window.OUTLOOK_NOTIFIER) {
+        window.OUTLOOK_NOTIFIER = setInterval(getNotifications, 60000);
+    }
 
 }());
