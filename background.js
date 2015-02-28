@@ -5,6 +5,17 @@ var TYPE = {
     IM_REQUESTS: 'IM requests'
 };
 
+function notify(title, message) {
+    chrome.notifications.create('notification' + Math.random(), {
+        type: 'basic',
+        title: title,
+        message: message,
+        iconUrl: 'outlook_256.png'
+    }, function (notificationId) {
+        // do nothing
+    });
+}
+
 chrome.runtime.onConnect.addListener(function (port) {
     port.onMessage.addListener(function (msg) {
         var text = '';
@@ -15,6 +26,9 @@ chrome.runtime.onConnect.addListener(function (port) {
             text: text
         });
 
+        if (msg[TYPE.ALERTS] + msg[TYPE.REMINDERS]) {
+            notify('Alert', 'You have an outlook alert/reminder');
+        }
         console.debug(msg);
     });
 });

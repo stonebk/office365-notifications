@@ -7,10 +7,6 @@
             IM_REQUESTS: 'IM requests'
         };
 
-    function notify(msg) {
-        alert(msg);
-    }
-
     // "New Mail: 2", "Alerts: 0", "Reminders: 0", "IM requests:0"
     function getNotificationType(title) {
         if (title.indexOf(TYPE.NEW_MAIL) >= 0) {
@@ -22,7 +18,9 @@
         } else if (title.indexOf(TYPE.IM_REQUESTS) >= 0) {
             return TYPE.IM_REQUESTS;
         }
-        notify('Unknown notification type: ' + title);
+        port.postMessage({
+            error: 'Unknown notification type: ' + title
+        });
         return null;
     }
 
@@ -42,11 +40,6 @@
 
         // Post message back to plugin for new message display
         port.postMessage(msg);
-
-        // Notifify alerts/reminders
-        if (msg[TYPE.ALERTS] + msg[TYPE.REMINDERS]) {
-            notify('ping');
-        }
     }
 
     getNotifications();
