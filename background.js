@@ -5,6 +5,26 @@ var TYPE = {
     IM_REQUESTS: 'IM requests'
 };
 
+function switchTabs(callback) {
+    chrome.tabs.query({
+        windowId: window.WINDOW_ID_CURRENT
+    }, function (tabs) {
+        var tab, i;
+        for (i = 0; i < tabs.length; i++) {
+            tab = tabs[i];
+            if (tab.url && tab.url.indexOf('outlook') > 0) {
+                chrome.tabs.update(tab.id, {
+                    selected: true
+                });
+                if (callback) {
+                    callback(tab.id);
+                }
+                return;
+            }
+        }
+    });
+}
+
 function notify(title, message) {
     chrome.notifications.create('notification' + Math.random(), {
         type: 'basic',
@@ -34,19 +54,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-    chrome.tabs.query({
-        windowId: window.WINDOW_ID_CURRENT
-    }, function (tabs) {
-        var tab, i;
-        for (i = 0; i < tabs.length; i++) {
-            tab = tabs[i];
-            if (tab.url && tab.url.indexOf('outlook') > 0) {
-                chrome.tabs.update(tab.id, {
-                    selected: true
-                });
-                chrome.tabs.executeScript(tab.id, { file: 'content.js' });
-                return;
-            }
-        }
+    switchTabs(function (tabId) {
+        chrome.tabs.executeScript(tabId, { file: 'content.js' });
     });
 });
