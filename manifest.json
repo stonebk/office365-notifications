@@ -1,6 +1,6 @@
 {
   "name": "Office 365 Notifications",
-  "description": "Notifications for Office 365 email and calendar.",
+  "description": "Email and calendar notifications for Office 365.",
   "version": "0.1",
   "icons": {
     "256": "outlook_256.png",
