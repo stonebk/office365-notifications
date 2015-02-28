@@ -20,7 +20,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-    chrome.tabs.getAllInWindow(undefined, function (tabs) {
+    chrome.tabs.query({
+        windowId: window.WINDOW_ID_CURRENT
+    }, function (tabs) {
         var tab, i;
         for (i = 0; i < tabs.length; i++) {
             tab = tabs[i];
