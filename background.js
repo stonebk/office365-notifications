@@ -66,8 +66,12 @@ chrome.runtime.onConnect.addListener(function (port) {
             text: text
         });
 
-        if (msg[TYPE.ALERTS] + msg[TYPE.REMINDERS]) {
-            notify('Alert', 'You have an outlook alert/reminder');
+        if (msg[TYPE.REMINDERS]) {
+            notify('Outlook Notifier Reminder', [
+                'You have',
+                msg[TYPE.REMINDERS],
+                'active reminder(s)'
+            ].join(' '));
         }
         console.debug(msg);
     });
