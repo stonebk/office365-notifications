@@ -1,9 +1,10 @@
-var TYPE = {
-    NEW_MAIL: 'New Mail',
-    ALERTS: 'Alerts',
-    REMINDERS: 'Reminders',
-    IM_REQUESTS: 'IM requests'
-};
+var notifications = {},
+    TYPE = {
+        NEW_MAIL: 'New Mail',
+        ALERTS: 'Alerts',
+        REMINDERS: 'Reminders',
+        IM_REQUESTS: 'IM requests'
+    };
 
 /**
  * Get the Office 365 tab.
@@ -93,17 +94,21 @@ function isCurrentTab(callback) {
  * @method notify
  * @param {String} title
  * @param {String} message
+ * @param {Function} callback Returns the notificationId
  */
-function notify(title, message) {
+function notify(title, message, callback) {
     isCurrentTab(function (isCurrent) {
         if (!isCurrent) {
             chrome.notifications.create('notification' + Math.random(), {
                 type: 'basic',
                 title: title,
                 message: message,
-                iconUrl: 'images/outlook_256.png'
+                iconUrl: 'images/outlook_256.png',
+                isClickable: true
             }, function (notificationId) {
-                // required, but do nothing
+                if (callback) {
+                    callback(notificationId);
+                }
             });
         }
     });
@@ -125,17 +130,32 @@ chrome.runtime.onConnect.addListener(function (port) {
             // Use "NEW" since the new mail count seems to be inaccurate
             text = 'NEW';
         }
+
+        // Update browser action alert
         chrome.browserAction.setBadgeText({
             text: text
         });
 
+        // Send desktop notification
         if (msg[TYPE.REMINDERS]) {
+
+            // Clear previous notification
+            if (notifications[TYPE.REMINDER]) {
+                chrome.notifications.clear(notifications[TYPE.REMINDER], function () {
+                    // required, but do nothing
+                });
+            }
+
+            // Create new notification
             notify('Outlook Reminder', [
                 'You have',
                 msg[TYPE.REMINDERS],
                 'active reminder(s)'
-            ].join(' '));
+            ].join(' '), function (notificationId) {
+                notifications[TYPE.REMINDER] = notificationId;
+            });
         }
+
         console.debug(msg);
     });
 });

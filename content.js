@@ -46,8 +46,8 @@
         port.postMessage(msg);
     }
 
-    getNotifications();
     if (!window.OUTLOOK_NOTIFIER) {
+        getNotifications();
         window.OUTLOOK_NOTIFIER = setInterval(getNotifications, 60000);
     }
 
