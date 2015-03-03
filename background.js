@@ -12,13 +12,14 @@ var TYPE = {
  * @param {Function} callback Returns the tab object if it exists, or null
  */
 function getTab(callback) {
-    chrome.windows.getLastFocused({}, function (win) {
-        chrome.tabs.query({
-            windowId: win.id
-        }, function (tabs) {
-            var tab, i;
-            for (i = 0; i < tabs.length; i++) {
-                tab = tabs[i];
+    chrome.windows.getAll({
+        populate: true
+    }, function (windows) {
+        var i, j, tabs, tab;
+        for (i = 0; i < windows.length; i += 1) {
+            tabs = windows[i].tabs;
+            for (j = 0; j < tabs.length; j += 1) {
+                tab = tabs[j];
                 if (tab.url && tab.url.indexOf('outlook.office365.com') > 0) {
                     if (callback) {
                         callback(tab);
@@ -26,10 +27,10 @@ function getTab(callback) {
                     return;
                 }
             }
-            if (callback) {
-                callback(null);
-            }
-        });
+        }
+        if (callback) {
+            callback(null);
+        }
     });
 }
 
@@ -43,9 +44,13 @@ function getTab(callback) {
 function switchTab(callback) {
     getTab(function (tab) {
         if (tab) {
-            chrome.tabs.update(tab.id, {
-                selected: true
-            }, callback);
+            chrome.windows.update(tab.windowId, {
+                focused: true
+            }, function () {
+                chrome.tabs.update(tab.id, {
+                    selected: true
+                }, callback);
+            });
         } else {
             if (callback) {
                 callback(null);
