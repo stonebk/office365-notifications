@@ -92,7 +92,7 @@ function notify(title, message) {
                 type: 'basic',
                 title: title,
                 message: message,
-                iconUrl: 'outlook_256.png'
+                iconUrl: 'images/outlook_256.png'
             }, function (notificationId) {
                 // required, but do nothing
             });
