@@ -26,7 +26,9 @@ function getTab(callback) {
                     return;
                 }
             }
-            callback(null);
+            if (callback) {
+                callback(null);
+            }
         });
     });
 }
@@ -45,7 +47,9 @@ function switchTab(callback) {
                 selected: true
             }, callback);
         } else {
-            callback(null);
+            if (callback) {
+                callback(null);
+            }
         }
     });
 }
