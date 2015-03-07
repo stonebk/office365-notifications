@@ -114,6 +114,27 @@ function notify(title, message, callback) {
     });
 }
 
+/**
+ * Update the status of our connection to Office 365
+ *
+ * @method updateConnectionStatus
+ * @param {Boolean} online
+ */
+function updateConnectionStatus(online) {
+    var path = 'images/outlook_32.png';
+    if (!online) {
+        path = 'images/outlook_grayscale_32.png';
+
+        // Reset notification text
+        chrome.browserAction.setBadgeText({
+            text: ''
+        });
+    }
+    chrome.browserAction.setIcon({
+        path: path
+    }, function () { /* noop */ });
+}
+
 // Listen for clicks on desktop notifications and switch tabs
 chrome.notifications.onClicked.addListener(function (notificationId) {
     switchTab();
@@ -126,9 +147,8 @@ chrome.notifications.onClicked.addListener(function (notificationId) {
 chrome.runtime.onConnect.addListener(function (port) {
     port.onMessage.addListener(function (msg) {
         var text = '';
-        if (msg[TYPE.NEW_MAIL]) {
-            // Use "NEW" since the new mail count seems to be inaccurate
-            text = 'NEW';
+        if (typeof msg[TYPE.NEW_MAIL] === 'number' && msg[TYPE.NEW_MAIL] > 0) {
+            text += msg[TYPE.NEW_MAIL];
         }
 
         // Update browser action alert
@@ -175,5 +195,6 @@ setInterval(function () {
         if (tab) {
             chrome.tabs.executeScript(tab.id, { file: 'content.js' });
         }
+        updateConnectionStatus(!!tab);
     });
-}, 60000);
+}, 5000);

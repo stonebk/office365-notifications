@@ -34,11 +34,16 @@
             notifications = document.querySelectorAll('.o365cs-notifications-notificationEntryButton');
         notifications = Array.prototype.slice.call(notifications);
         notifications.forEach(function (notification) {
-            var title = notification.getAttribute('title');
-            msg[getNotificationType(title)] = 0;
-            // Make sure notification is visible (up-to-date)
-            if (notification.clientHeight) {
-                msg[getNotificationType(title)] = getNotificationNumber(title);
+            var title = notification.getAttribute('title'),
+                type = getNotificationType(title);
+
+            // Mail notifications are handled separately
+            if (type !== TYPE.NEW_MAIL) {
+                msg[type] = 0;
+                // Make sure notification is visible (up-to-date)
+                if (notification.clientHeight) {
+                    msg[type] = getNotificationNumber(title);
+                }
             }
         });
 
@@ -46,9 +51,54 @@
         port.postMessage(msg);
     }
 
-    if (!window.OUTLOOK_NOTIFIER) {
+    if (!window.CALENDAR_INTERVAL) {
         getNotifications();
-        window.OUTLOOK_NOTIFIER = setInterval(getNotifications, 60000);
+        window.CALENDAR_INTERVAL = setInterval(getNotifications, 60000);
+    }
+
+
+    /**
+     * Get the id for the given folder.
+     *
+     * @method getFolderId
+     * @param {String} [folder=Inbox]
+     * @return {String} folder ID
+     */
+    function getFolderId(folder) {
+        folder = folder || 'Inbox';
+        var subfolder = document.querySelector('.subfolders[aria-label=' + folder + ']');
+        if (subfolder) {
+            return subfolder.id.replace('.subfolders', '');
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Get the unread mail count for the given folder ID.
+     *
+     * @method getUnreadCount
+     * @param {String} id Folder id
+     * @return {Number} Unread count
+     */
+    function getUnreadCount(id) {
+        var node = document.getElementById(id + '.ucount');
+        if (node) {
+            return parseInt(node.textContent, 10) || 0;
+        } else {
+            return 0;
+        }
+    }
+
+    if (!window.MAIL_INTERVAL) {
+        window.MAIL_INTERVAL = setInterval(function () {
+            var msg = {},
+                unread = getUnreadCount(getFolderId());
+            if (!isNaN(unread)) {
+                msg[TYPE.NEW_MAIL] = unread;
+                port.postMessage(msg);
+            }
+        }, 1000);
     }
 
 }());
