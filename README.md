@@ -1,5 +1,4 @@
 Office 365 Notifications
 ========================
 
-
-Chrome extension for Outlook 365 calender reminders and email counts.
+https://chrome.google.com/webstore/detail/office-365-notifications/gedebpfoejibcdeigbamnfcdgnopdcjn
