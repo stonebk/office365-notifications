@@ -58,13 +58,13 @@
 
 
     /**
-     * Get the id for the given folder.
+     * Get the id for the given subfolder.
      *
-     * @method getFolderId
+     * @method getSubFolderId
      * @param {String} [folder=Inbox]
      * @return {String} folder ID
      */
-    function getFolderId(folder) {
+    function getSubFolderId(folder) {
         folder = folder || 'Inbox';
         var subfolder = document.querySelector('.subfolders[aria-label=' + folder + ']');
         if (subfolder) {
@@ -72,6 +72,26 @@
         } else {
             return null;
         }
+    }
+
+    /**
+     * Get the id for the given favorites folder.
+     *
+     * @method getFavFolderId
+     * @param {String} [folder=Inbox]
+     * @return {String} folder ID
+     */
+    function getFavFolderId(folder) {
+        folder = folder || 'Inbox';
+        var favorites = document.getElementById('MailFolderPane.FavoritesFolders'),
+            folderNode;
+        if (favorites) {
+            folderNode = favorites.querySelector('[title=' + folder + ']');
+            if (folderNode) {
+                return folderNode.id.replace('.folder', '');
+            }
+        }
+        return null;
     }
 
     /**
@@ -93,7 +113,7 @@
     if (!window.MAIL_INTERVAL) {
         window.MAIL_INTERVAL = setInterval(function () {
             var msg = {},
-                unread = getUnreadCount(getFolderId());
+                unread = getUnreadCount(getFavFolderId() || getSubFolderId());
             if (!isNaN(unread)) {
                 msg[TYPE.NEW_MAIL] = unread;
                 port.postMessage(msg);
