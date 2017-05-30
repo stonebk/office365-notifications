@@ -21,7 +21,7 @@ function getTab(callback) {
             tabs = windows[i].tabs;
             for (j = 0; j < tabs.length; j += 1) {
                 tab = tabs[j];
-                if (tab.url && tab.url.indexOf('outlook.office365.com') > 0) {
+                if (tab.url && tab.url.indexOf('outlook.office.com') > 0) {
                     if (callback) {
                         callback(tab);
                     }

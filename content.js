@@ -83,10 +83,10 @@
      */
     function getFavFolderId(folder) {
         folder = folder || 'Inbox';
-        var favorites = document.getElementById('MailFolderPane.FavoritesFolders'),
+        var folderPane = document.querySelector('[aria-label="Folder Pane"]'),
             folderNode;
-        if (favorites) {
-            folderNode = favorites.querySelector('[title=' + folder + ']');
+        if (folderPane) {
+            folderNode = folderPane.querySelector('[title=' + folder + ']');
             if (folderNode) {
                 return folderNode.id.replace('.folder', '');
             }
